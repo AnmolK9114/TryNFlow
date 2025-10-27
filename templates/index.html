@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TRYnFLOW - AI-Powered Fashion Try-On SaaS Platform</title>
+
+    <!-- ✅ Correct CSS path -->
+    <link rel="stylesheet" href="/static/style.css">
+
+    <!-- ✅ Correct JS path + best practice: defer -->
+    <script src="/static/app.js" defer></script>
+
+    <!-- (Optional but nice) -->
+    <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
+</head>
+<body onload="initializeTryOn()">
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <h2>TRYnFLOW</h2>
+            </div>
+            <div class="nav-menu">
+                <button class="nav-item" data-section="landing">Home</button>
+                <button class="nav-item" data-section="dashboard">Dashboard</button>
+                <button class="nav-item" data-section="try-on">Try-On</button>
+                <button class="nav-item" data-section="stylist">AI Stylist</button>
+                <button class="nav-item" data-section="analytics">Analytics</button>
+                <button class="nav-item" data-section="admin">Admin</button>
+                <button class="btn btn--primary" data-section="pricing">Get Started</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Landing Section -->
+    <section id="landing" class="section active">
+        <div class="hero">
+            <div class="container">
+                <div class="hero-content">
+                    <h1>Revolutionary AI Try-On Experience for Fashion Brands</h1>
+                    <p>Transform your e-commerce with TRYnFLOW's cutting-edge virtual try-on technology. Increase conversions by 300% with AI-powered fashion visualization.</p>
+                    <div class="hero-stats">
+                        <div class="stat-item">
+                            <h3>127+</h3>
+                            <p>Fashion Brands</p>
+                        </div>
+                        <div class="stat-item">
+                            <h3>45K+</h3>
+                            <p>Active Users</p>
+                        </div>
+                        <div class="stat-item">
+                            <h3>156K+</h3>
+                            <p>Monthly Try-Ons</p>
+                        </div>
+                    </div>
+                    <div class="hero-actions">
+                        <button class="btn btn--primary btn--lg" onclick="startOnboarding()">Start Free Trial</button>
+                        <button class="btn btn--outline btn--lg" data-section="try-on">Try Demo</button>
+                    </div>
+                </div>
+                <div class="hero-visual">
+                    <div class="try-on-preview">
+                        <div class="preview-screen">
+                            <div class="model-silhouette"></div>
+                            <div class="floating-products">
+                                <div class="product-card mini">Shirt</div>
+                                <div class="product-card mini">Jacket</div>
+                                <div class="product-card mini">Pants</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Features Section -->
+        <div class="features-section">
+            <div class="container">
+                <h2>Complete SaaS Platform for Fashion Brands</h2>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">🎯</div>
+                        <h3>Virtual Try-On Engine</h3>
+                        <p>AI-powered realistic fitting for all clothing categories with advanced cloth physics</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🤖</div>
+                        <h3>AI Personal Stylist</h3>
+                        <p>Personalized recommendations based on trends, body type, and style preferences</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">📊</div>
+                        <h3>Brand Dashboard</h3>
+                        <p>Complete SaaS control panel with analytics, inventory, and campaign management</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🔗</div>
+                        <h3>Easy Integrations</h3>
+                        <p>Shopify, WooCommerce, Magento plugins with REST & GraphQL APIs</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Brand Dashboard Section -->
+    <section id="dashboard" class="section">
+        <div class="dashboard-container">
+            <div class="dashboard-sidebar">
+                <div class="brand-info">
+                    <img src="https://via.placeholder.com/60x60/ff0000/ffffff?text=SC" alt="Brand Logo">
+                    <div>
+                        <h4>StyleCraft Fashion</h4>
+                        <p>Premium Fashion</p>
+                    </div>
+                </div>
+                <nav class="sidebar-nav">
+                    <button class="sidebar-item active" data-dashboard="overview">Overview</button>
+                    <button class="sidebar-item" data-dashboard="products">Products</button>
+                    <button class="sidebar-item" data-dashboard="campaigns">Campaigns</button>
+                    <button class="sidebar-item" data-dashboard="integrations">Integrations</button>
+                    <button class="sidebar-item" data-dashboard="settings">Settings</button>
+                </nav>
+            </div>
+            
+            <div class="dashboard-main">
+                <!-- Overview Dashboard -->
+                <div id="overview" class="dashboard-view active">
+                    <div class="dashboard-header">
+                        <h2>Dashboard Overview</h2>
+                        <div class="date-filter">
+                            <select class="form-control">
+                                <option>Last 30 days</option>
+                                <option>Last 7 days</option>
+                                <option>Last 90 days</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="metrics-grid">
+                        <div class="metric-card">
+                            <div class="metric-header">
+                                <span class="metric-title">Monthly Revenue</span>
+                                <span class="metric-trend positive">+18.2%</span>
+                            </div>
+                            <div class="metric-value">$125,000</div>
+                            <div class="metric-chart">
+                                <canvas id="revenueChart" style="position: relative; height: 60px;"></canvas>
+                            </div>
+                        </div>
+                        
+                        <div class="metric-card">
+                            <div class="metric-header">
+                                <span class="metric-title">Try-On Sessions</span>
+                                <span class="metric-trend positive">+24.5%</span>
+                            </div>
+                            <div class="metric-value">8,945</div>
+                            <div class="metric-chart">
+                                <canvas id="sessionsChart" style="position: relative; height: 60px;"></canvas>
+                            </div>
+                        </div>
+                        
+                        <div class="metric-card">
+                            <div class="metric-header">
+                                <span class="metric-title">Conversion Rate</span>
+                                <span class="metric-trend positive">+3.1%</span>
+                            </div>
+                            <div class="metric-value">24.5%</div>
+                            <div class="metric-chart">
+                                <canvas id="conversionChart" style="position: relative; height: 60px;"></canvas>
+                            </div>
+                        </div>
+                        
+                        <div class="metric-card">
+                            <div class="metric-header">
+                                <span class="metric-title">Active Users</span>
+                                <span class="metric-trend positive">+12.8%</span>
+                            </div>
+                            <div class="metric-value">15,420</div>
+                            <div class="metric-chart">
+                                <canvas id="usersChart" style="position: relative; height: 60px;"></canvas>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="dashboard-grid">
+                        <div class="dashboard-card">
+                            <h3>Top Performing Products</h3>
+                            <div class="product-list">
+                                <div class="product-item">
+                                    <img src="https://via.placeholder.com/50x50/f0f0f0/333333?text=Shirt" alt="Product">
+                                    <div class="product-info">
+                                        <h4>Classic White Shirt</h4>
+                                        <p>456 try-ons • 28.5% conversion</p>
+                                    </div>
+                                    <div class="product-revenue">$8,949</div>
+                                </div>
+                                <div class="product-item">
+                                    <img src="https://via.placeholder.com/50x50/4169E1/ffffff?text=Jacket" alt="Product">
+                                    <div class="product-info">
+                                        <h4>Denim Jacket</h4>
+                                        <p>892 try-ons • 22.1% conversion</p>
+                                    </div>
+                                    <div class="product-revenue">$12,430</div>
+                                </div>
+                                <div class="product-item">
+                                    <img src="https://via.placeholder.com/50x50/1a1a1a/ffffff?text=Blazer" alt="Product">
+                                    <div class="product-info">
+                                        <h4>Business Blazer</h4>
+                                        <p>234 try-ons • 35.7% conversion</p>
+                                    </div>
+                                    <div class="product-revenue">$15,670</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="dashboard-card">
+                            <h3>Recent Activity</h3>
+                            <div class="activity-feed">
+                                <div class="activity-item">
+                                    <div class="activity-icon">👤</div>
+                                    <div class="activity-content">
+                                        <p><strong>Sarah Johnson</strong> completed a try-on session</p>
+                                        <span class="activity-time">2 minutes ago</span>
+                                    </div>
+                                </div>
+                                <div class="activity-item">
+                                    <div class="activity-icon">💰</div>
+                                    <div class="activity-content">
+                                        <p>New purchase: Business Blazer - <strong>$199.99</strong></p>
+                                        <span class="activity-time">15 minutes ago</span>
+                                    </div>
+                                </div>
+                                <div class="activity-item">
+                                    <div class="activity-icon">📊</div>
+                                    <div class="activity-content">
+                                        <p>Weekly analytics report generated</p>
+                                        <span class="activity-time">1 hour ago</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Products Dashboard -->
+                <div id="products" class="dashboard-view">
+                    <div class="dashboard-header">
+                        <h2>Product Catalog</h2>
+                        <div class="header-actions">
+                            <button class="btn btn--outline" onclick="showUploadModal()">Import CSV</button>
+                            <button class="btn btn--primary" onclick="showAddProductModal()">Add Product</button>
+                        </div>
+                    </div>
+                    
+                    <div class="filters-bar">
+                        <select class="form-control">
+                            <option>All Categories</option>
+                            <option>Tops</option>
+                            <option>Outerwear</option>
+                            <option>Blazers</option>
+                        </select>
+                        <input type="text" class="form-control" placeholder="Search products...">
+                    </div>
+
+                    <div class="products-grid">
+                        <div class="product-card-large">
+                            <img src="https://via.placeholder.com/300x400/f0f0f0/333333?text=White+Shirt" alt="Classic White Shirt">
+                            <div class="product-details">
+                                <h4>Classic White Shirt</h4>
+                                <p class="product-price">$89.99</p>
+                                <div class="product-stats">
+                                    <span class="stat">456 try-ons</span>
+                                    <span class="stat">28.5% conversion</span>
+                                </div>
+                                <div class="product-actions">
+                                    <button class="btn btn--sm btn--outline">Edit</button>
+                                    <button class="btn btn--sm btn--secondary">Analytics</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="product-card-large">
+                            <img src="https://via.placeholder.com/300x400/4169E1/ffffff?text=Denim+Jacket" alt="Denim Jacket">
+                            <div class="product-details">
+                                <h4>Denim Jacket</h4>
+                                <p class="product-price">$129.99</p>
+                                <div class="product-stats">
+                                    <span class="stat">892 try-ons</span>
+                                    <span class="stat">22.1% conversion</span>
+                                </div>
+                                <div class="product-actions">
+                                    <button class="btn btn--sm btn--outline">Edit</button>
+                                    <button class="btn btn--sm btn--secondary">Analytics</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="product-card-large">
+                            <img src="https://via.placeholder.com/300x400/1a1a1a/ffffff?text=Blazer" alt="Business Blazer">
+                            <div class="product-details">
+                                <h4>Business Blazer</h4>
+                                <p class="product-price">$199.99</p>
+                                <div class="product-stats">
+                                    <span class="stat">234 try-ons</span>
+                                    <span class="stat">35.7% conversion</span>
+                                </div>
+                                <div class="product-actions">
+                                    <button class="btn btn--sm btn--outline">Edit</button>
+                                    <button class="btn btn--sm btn--secondary">Analytics</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Other dashboard views will be handled by JS -->
+                <div id="campaigns" class="dashboard-view">
+                    <div class="dashboard-header">
+                        <h2>Marketing Campaigns</h2>
+                        <button class="btn btn--primary">Create Campaign</button>
+                    </div>
+                    <div class="empty-state">
+                        <div class="empty-icon">📢</div>
+                        <h3>No active campaigns</h3>
+                        <p>Create your first marketing campaign to boost try-on engagement</p>
+                        <button class="btn btn--primary">Get Started</button>
+                    </div>
+                </div>
+
+                <div id="integrations" class="dashboard-view">
+                    <div class="dashboard-header">
+                        <h2>Platform Integrations</h2>
+                    </div>
+                    <div class="integrations-grid">
+                        <div class="integration-card">
+                            <div class="integration-logo">🛒</div>
+                            <h3>Shopify</h3>
+                            <p class="integration-status connected">Connected</p>
+                            <p>2,340 stores • 99.2% uptime</p>
+                            <button class="btn btn--outline btn--sm">Configure</button>
+                        </div>
+                        <div class="integration-card">
+                            <div class="integration-logo">🛍️</div>
+                            <h3>WooCommerce</h3>
+                            <p class="integration-status connected">Connected</p>
+                            <p>1,890 stores • 98.8% uptime</p>
+                            <button class="btn btn--outline btn--sm">Configure</button>
+                        </div>
+                        <div class="integration-card">
+                            <div class="integration-logo">⚡</div>
+                            <h3>Magento</h3>
+                            <p class="integration-status beta">Beta</p>
+                            <p>567 stores • 97.5% uptime</p>
+                            <button class="btn btn--primary btn--sm">Connect</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Virtual Try-On Section -->
+    <section id="try-on" class="section">
+  <div class="try-on-container">
+
+    <div class="try-on-main">
+      <div class="try-on-header">
+        <h2>Virtual Try-On Experience</h2>
+        <div class="try-on-controls">
+          <button class="btn btn--outline" onclick="document.getElementById('userUpload').click()">Upload Photo</button>
+          <button class="btn btn--secondary" id="cameraButton">Use Camera</button>
+          <button class="btn btn--primary" onclick="saveLook()">Save Look</button>
+        </div>
+
+        <div id="cameraView" style="display:none;">
+          <video id="liveVideo" autoplay playsinline style="width:100%;"></video>
+        </div>
+      </div>
+    </div>
+
+    <!-- Try-On Workspace -->
+    <div class="try-on-workspace">
+      <div class="model-viewer">
+        <div class="model-container">
+          <div class="model-placeholder">
+            <div class="upload-prompt">
+              <div class="upload-icon">📸</div>
+              <h4>Upload Your Photo & Garment</h4>
+              <p>For best results, upload a clear photo and a clothing image</p>
+
+              <!-- 🧠 File inputs -->
+              <input type="file" id="userUpload" accept="image/*">
+              <input type="file" id="garmentUpload" accept="image/*">
+
+              <!-- 🧠 Button to trigger backend call -->
+              <button class="btn btn--primary" onclick="runTryOn()">Try On</button>
+
+              <!-- 🧠 Output Image -->
+              <img id="resultImage" style="margin-top:20px; max-width:400px;">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Results Section -->
+      <div class="try-on-results">
+        <div class="results-header">
+          <h4>Try-On Results</h4>
+          <div class="view-controls">
+            <button class="view-btn active">Single View</button>
+            <button class="view-btn">Compare</button>
+            <button class="view-btn">360° View</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  // ✅ Camera button
+  document.getElementById('cameraButton').onclick = function() {
+    const cameraView = document.getElementById('cameraView');
+    const video = document.getElementById('liveVideo');
+    cameraView.style.display = 'block';
+    navigator.mediaDevices.getUserMedia({ video: true })
+      .then(function(stream) {
+        video.srcObject = stream;
+      })
+      .catch(function(err) {
+        alert('Error accessing camera: ' + err.name);
+      });
+  };
+
+  // ✅ Run Try-On Function
+  async function runTryOn() {
+    const userFile = document.getElementById('userUpload').files[0];
+    const garmentFile = document.getElementById('garmentUpload').files[0];
+
+    if (!userFile || !garmentFile) {
+      alert("Please upload both images!");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("user_image", userFile);
+    formData.append("garment_image", garmentFile);
+
+    const resultImage = document.getElementById('resultImage');
+    resultImage.src = "";
+    resultImage.alt = "Processing...";
+
+    try {
+      const response = await fetch("/tryon", {
+        method: "POST",
+        body: formData,
+      });
+
+      if (!response.ok) {
+        throw new Error("Try-on failed: " + response.statusText);
+      }
+
+      const blob = await response.blob();
+      resultImage.src = URL.createObjectURL(blob);
+      resultImage.alt = "Try-On Result";
+    } catch (error) {
+      alert("Error: " + error.message);
+    }
+  }
+</script>
+
+    <!-- Analytics Section -->
+    <section id="analytics" class="section">
+        <div class="container">
+            <div class="analytics-header">
+                <h2>Advanced Analytics Dashboard</h2>
+                <div class="analytics-controls">
+                    <select class="form-control">
+                        <option>Last 30 Days</option>
+                        <option>Last 7 Days</option>
+                        <option>Last 90 Days</option>
+                    </select>
+                    <button class="btn btn--outline">Export Report</button>
+                </div>
+            </div>
+
+            <div class="analytics-overview">
+                <div class="analytics-cards">
+                    <div class="analytics-card">
+                        <div class="card-icon">📈</div>
+                        <div class="card-content">
+                            <h3>$2.34M</h3>
+                            <p>Platform Revenue</p>
+                            <span class="trend positive">+34.2%</span>
+                        </div>
+                    </div>
+                    <div class="analytics-card">
+                        <div class="card-icon">👥</div>
+                        <div class="card-content">
+                            <h3>45.2K</h3>
+                            <p>Total Users</p>
+                            <span class="trend positive">+23.5%</span>
+                        </div>
+                    </div>
+                    <div class="analytics-card">
+                        <div class="card-icon">🏢</div>
+                        <div class="card-content">
+                            <h3>127</h3>
+                            <p>Active Brands</p>
+                            <span class="trend positive">+18.9%</span>
+                        </div>
+                    </div>
+                    <div class="analytics-card">
+                        <div class="card-icon">🎯</div>
+                        <div class="card-content">
+                            <h3>156.8K</h3>
+                            <p>Monthly Try-Ons</p>
+                            <span class="trend positive">+41.2%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="analytics-charts">
+                <div class="chart-container">
+                    <h3>Revenue Growth</h3>
+                    <div class="chart-wrapper" style="position: relative; height: 300px;">
+                        <canvas id="revenueGrowthChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="chart-container">
+                    <h3>Popular Categories</h3>
+                    <div class="chart-wrapper" style="position: relative; height: 300px;">
+                        <canvas id="categoriesChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="chart-container">
+                    <h3>User Engagement</h3>
+                    <div class="chart-wrapper" style="position: relative; height: 300px;">
+                        <canvas id="engagementChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="chart-container">
+                    <h3>Brand Performance</h3>
+                    <div class="brand-performance">
+                        <div class="performance-item">
+                            <div class="brand-info">
+                                <img src="https://via.placeholder.com/40x40/ff0000/ffffff?text=SC" alt="StyleCraft">
+                                <div>
+                                    <h5>StyleCraft Fashion</h5>
+                                    <p>Premium Fashion</p>
+                                </div>
+                            </div>
+                            <div class="performance-metrics">
+                                <div class="metric">
+                                    <span class="metric-label">Revenue</span>
+                                    <span class="metric-value">$125K</span>
+                                </div>
+                                <div class="metric">
+                                    <span class="metric-label">Growth</span>
+                                    <span class="metric-value positive">+18.2%</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="performance-item">
+                            <div class="brand-info">
+                                <img src="https://via.placeholder.com/40x40/000000/ffffff?text=UT" alt="Urban Threads">
+                                <div>
+                                    <h5>Urban Threads</h5>
+                                    <p>Streetwear</p>
+                                </div>
+                            </div>
+                            <div class="performance-metrics">
+                                <div class="metric">
+                                    <span class="metric-label">Revenue</span>
+                                    <span class="metric-value">$89K</span>
+                                </div>
+                                <div class="metric">
+                                    <span class="metric-label">Growth</span>
+                                    <span class="metric-value positive">+22.1%</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="performance-item">
+                            <div class="brand-info">
+                                <img src="https://via.placeholder.com/40x40/cc0000/ffffff?text=EE" alt="Elegant Essentials">
+                                <div>
+                                    <h5>Elegant Essentials</h5>
+                                    <p>Business Wear</p>
+                                </div>
+                            </div>
+                            <div class="performance-metrics">
+                                <div class="metric">
+                                    <span class="metric-label">Revenue</span>
+                                    <span class="metric-value">$156K</span>
+                                </div>
+                                <div class="metric">
+                                    <span class="metric-label">Growth</span>
+                                    <span class="metric-value positive">+15.7%</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Admin Section -->
+    <section id="admin" class="section">
+        <div class="container">
+            <div class="admin-header">
+                <h2>Platform Administration</h2>
+                <div class="admin-stats">
+                    <div class="admin-stat">
+                        <h4>127</h4>
+                        <p>Total Brands</p>
+                    </div>
+                    <div class="admin-stat">
+                        <h4>45.2K</h4>
+                        <p>Active Users</p>
+                    </div>
+                    <div class="admin-stat">
+                        <h4>$2.34M</h4>
+                        <p>Monthly Revenue</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="admin-dashboard">
+                <div class="admin-card">
+                    <h3>Brand Management</h3>
+                    <div class="brand-list">
+                        <div class="brand-item">
+                            <img src="https://via.placeholder.com/50x50/ff0000/ffffff?text=SC" alt="StyleCraft">
+                            <div class="brand-details">
+                                <h5>StyleCraft Fashion</h5>
+                                <p>Premium Fashion • 15,420 subscribers</p>
+                                <div class="brand-status">
+                                    <span class="status status--success">Active</span>
+                                    <span class="revenue">$125K/month</span>
+                                </div>
+                            </div>
+                            <button class="btn btn--outline btn--sm">Manage</button>
+                        </div>
+
+                        <div class="brand-item">
+                            <img src="https://via.placeholder.com/50x50/000000/ffffff?text=UT" alt="Urban Threads">
+                            <div class="brand-details">
+                                <h5>Urban Threads</h5>
+                                <p>Streetwear • 9,880 subscribers</p>
+                                <div class="brand-status">
+                                    <span class="status status--success">Active</span>
+                                    <span class="revenue">$89K/month</span>
+                                </div>
+                            </div>
+                            <button class="btn btn--outline btn--sm">Manage</button>
+                        </div>
+
+                        <div class="brand-item">
+                            <img src="https://via.placeholder.com/50x50/cc0000/ffffff?text=EE" alt="Elegant Essentials">
+                            <div class="brand-details">
+                                <h5>Elegant Essentials</h5>
+                                <p>Business Wear • 7,230 subscribers</p>
+                                <div class="brand-status">
+                                    <span class="status status--success">Active</span>
+                                    <span class="revenue">$156K/month</span>
+                                </div>
+                            </div>
+                            <button class="btn btn--outline btn--sm">Manage</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="admin-card">
+                    <h3>System Health</h3>
+                    <div class="health-metrics">
+                        <div class="health-item">
+                            <div class="health-label">API Uptime</div>
+                            <div class="health-value success">99.9%</div>
+                        </div>
+                        <div class="health-item">
+                            <div class="health-label">Try-On Engine</div>
+                            <div class="health-value success">Operational</div>
+                        </div>
+                        <div class="health-item">
+                            <div class="health-label">Database</div>
+                            <div class="health-value success">Healthy</div>
+                        </div>
+                        <div class="health-item">
+                            <div class="health-label">CDN</div>
+                            <div class="health-value success">Active</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section id="pricing" class="section">
+        <div class="container">
+            <div class="pricing-header">
+                <h2>Choose Your Plan</h2>
+                <p>Flexible pricing for fashion brands of all sizes</p>
+            </div>
+
+            <div class="pricing-plans">
+                <div class="pricing-plan">
+                    <h3>Starter</h3>
+                    <div class="plan-price">
+                        <span class="currency">$</span>
+                        <span class="amount">99</span>
+                        <span class="period">/month</span>
+                    </div>
+                    <ul class="plan-features">
+                        <li>Up to 1,000 try-ons/month</li>
+                        <li>Basic analytics</li>
+                        <li>Shopify integration</li>
+                        <li>Email support</li>
+                    </ul>
+                    <button class="btn btn--outline btn--full-width">Start Free Trial</button>
+                </div>
+
+                <div class="pricing-plan featured">
+                    <div class="plan-badge">Most Popular</div>
+                    <h3>Professional</h3>
+                    <div class="plan-price">
+                        <span class="currency">$</span>
+                        <span class="amount">299</span>
+                        <span class="period">/month</span>
+                    </div>
+                    <ul class="plan-features">
+                        <li>Up to 10,000 try-ons/month</li>
+                        <li>Advanced analytics</li>
+                        <li>All platform integrations</li>
+                        <li>AI stylist features</li>
+                        <li>Priority support</li>
+                    </ul>
+                    <button class="btn btn--primary btn--full-width">Start Free Trial</button>
+                </div>
+
+                <div class="pricing-plan">
+                    <h3>Enterprise</h3>
+                    <div class="plan-price">
+                        <span class="currency">$</span>
+                        <span class="amount">999</span>
+                        <span class="period">/month</span>
+                    </div>
+                    <ul class="plan-features">
+                        <li>Unlimited try-ons</li>
+                        <li>Custom analytics</li>
+                        <li>White-label solution</li>
+                        <li>Dedicated account manager</li>
+                        <li>24/7 phone support</li>
+                    </ul>
+                    <button class="btn btn--outline btn--full-width">Contact Sales</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Modals -->
+    <div class="modal hidden" id="uploadModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Upload Product Catalog</h3>
+                <button class="modal-close" onclick="closeModal('uploadModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="upload-area">
+                    <div class="upload-icon">📁</div>
+                    <h4>Drag & Drop CSV File</h4>
+                    <p>Or click to browse your files</p>
+                    <input type="file" accept=".csv" style="display: none;">
+                    <button class="btn btn--primary">Choose File</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal hidden" id="onboardingModal">
+        <div class="modal-content">
+            <div class="onboarding-steps">
+                <div class="step active" data-step="1">
+                    <h3>Welcome to TRYnFLOW</h3>
+                    <p>Let's set up your brand in just a few steps</p>
+                    <div class="form-group">
+                        <label class="form-label">Brand Name</label>
+                        <input type="text" class="form-control" placeholder="Enter your brand name">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Industry</label>
+                        <select class="form-control">
+                            <option>Fashion & Apparel</option>
+                            <option>Accessories</option>
+                            <option>Footwear</option>
+                        </select>
+                    </div>
+                    <button class="btn btn--primary" onclick="nextStep()">Continue</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/static/app.js" defer></script>
+</body>
+</html>
