@@ -1,20 +1,26 @@
-# Use the official Python 3.10 image
-FROM python:3.10.13-slim
+# Use a stable and Render-compatible Python version
+FROM python:3.10-slim
 
-# Set the working directory
+# Set working directory
 WORKDIR /app
 
-# Copy all project files into container
+# Copy dependency file first (for caching)
 COPY requirements.txt .
 
-# Install dependencies
+# Install system dependencies (for OpenCV and Mediapipe)
+RUN apt-get update && apt-get install -y \
+    libgl1 \
+    libglib2.0-0 \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install Python dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy the rest of the application code
+# Copy the rest of the project
 COPY . .
 
-# Expose port 10000 
+# Expose port 10000 (Render expects this by default)
 EXPOSE 10000
 
-# Command to start the app
+# Run FastAPI app with uvicorn
 CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "10000"]
