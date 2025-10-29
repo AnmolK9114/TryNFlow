@@ -1,11 +1,13 @@
 # Use a stable and Render-compatible Python version
-FROM python:3.10-slim
+FROM python:3.11-slim
 
 # Set working directory
 WORKDIR /app
 
 # Copy dependency file first (for caching)
 COPY requirements.txt .
+
+RUN pip install --upgrade pip
 
 # Install system dependencies (for OpenCV and Mediapipe)
 RUN apt-get update && apt-get install -y \
