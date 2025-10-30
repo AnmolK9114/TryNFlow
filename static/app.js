@@ -446,18 +446,36 @@ function initializeTryOn() {
     });
   });
 
+  // Called when user clicks "Select" in catalogue
+function selectGarment(path) {
+  // store path in hidden input
+  const input = document.getElementById('selectedGarmentPath');
+  if (input) input.value = path;
+
+  // show a small visual confirmation (optional)
+  document.querySelectorAll('.garment-item').forEach(it => it.style.outline = 'none');
+  // find the matching item and outline it
+  const items = document.querySelectorAll('.garment-item img');
+  items.forEach(img => {
+    if (img.src.endsWith(path.replace('/static/',''))) {
+      img.parentElement.style.outline = '3px solid rgba(14,165,164,0.25)';
+    }
+  });
+}
+
+
   // Photo upload
   async function runTryOn() {
   const userFile = document.getElementById("userUpload").files[0];
-  const garmentFile = document.getElementById("garmentUpload").files[0];
-  const resultContainer = document.getElementById("resultImage");
+  const garmentFile = document.getElementById("garmentUpload") ? document.getElementById("garmentUpload").files[0] : null;
+  const selectedGarment = document.getElementById('selectedGarmentPath').value || null;
 
-  if (!userFile || !garmentFile) {
-    alert("Please upload both user and garment images.");
+  if (!userFile) {
+    alert("Please upload your photo.");
     return;
   }
 
-  // Show loading message
+  // Show loading
   document.querySelector('.results-content').innerHTML = `
     <div class="loading-state">
       <div class="loading-spinner"></div>
@@ -468,7 +486,17 @@ function initializeTryOn() {
   try {
     const formData = new FormData();
     formData.append("user_image", userFile);
-    formData.append("garment_image", garmentFile);
+
+    // If user uploaded garment file, prefer that
+    if (garmentFile) {
+      formData.append("garment_image", garmentFile);
+    } else if (selectedGarment) {
+      // If no file uploaded, send selected garment path
+      formData.append("garment_url", selectedGarment);
+    } else {
+      alert("Please upload a garment or select one from the catalogue.");
+      return;
+    }
 
     const response = await fetch("http://127.0.0.1:8000/tryon", {
   method: "POST",
